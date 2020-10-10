@@ -4402,7 +4402,7 @@ function _nonIterableRest() {
   var checkIfURLSearchParamsSupported = function checkIfURLSearchParamsSupported() {
     try {
       var URLSearchParams = global.URLSearchParams;
-      return new URLSearchParams('?a=1').toString() === 'a=1' && typeof URLSearchParams.prototype.set === 'function';
+      return new URLSearchParams('?a=1').toString() === 'a=1' && typeof URLSearchParams.prototype.set === 'function' && typeof URLSearchParams.prototype.entries === 'function';
     } catch (e) {
       return false;
     }
@@ -4526,7 +4526,11 @@ function _nonIterableRest() {
         anchorElement.href = anchorElement.href; // force href to refresh
       }
 
-      if (anchorElement.protocol === ':' || !/:/.test(anchorElement.href)) {
+      var inputElement = doc.createElement('input');
+      inputElement.type = 'url';
+      inputElement.value = url;
+
+      if (anchorElement.protocol === ':' || !/:/.test(anchorElement.href) || !inputElement.checkValidity() && !base) {
         throw new TypeError('Invalid URL');
       }
 
@@ -10898,7 +10902,7 @@ var ui = {
     // Loop through values (as they are the keys when the object is spread 🤔)
     Object.values(_objectSpread2({}, this.media.style)) // We're only fussed about Plyr specific properties
     .filter(function (key) {
-      return !is$1.empty(key) && key.startsWith('--plyr');
+      return typeof key === 'string' && key.startsWith('--plyr');
     }).forEach(function (key) {
       // Set on the container
       _this5.elements.container.style.setProperty(key, _this5.media.style.getPropertyValue(key)); // Clean up from media element

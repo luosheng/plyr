@@ -4564,7 +4564,7 @@ var ui = {
     // Loop through values (as they are the keys when the object is spread 🤔)
     Object.values(_objectSpread2({}, this.media.style)) // We're only fussed about Plyr specific properties
     .filter(function (key) {
-      return !is$1.empty(key) && key.startsWith('--plyr');
+      return typeof key === 'string' && key.startsWith('--plyr');
     }).forEach(function (key) {
       // Set on the container
       _this5.elements.container.style.setProperty(key, _this5.media.style.getPropertyValue(key)); // Clean up from media element
